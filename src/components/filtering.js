@@ -2,6 +2,8 @@ import {createComparison, defaultRules} from "../lib/compare.js";
 
 // @todo: #4.3 — настроить компаратор
 
+const compare = createComparison(defaultRules);
+
 export function initFiltering(elements, indexes) {
     // @todo: #4.1 — заполнить выпадающие списки опциями
     Object.keys(indexes).forEach((elementName)=> {
@@ -17,7 +19,6 @@ export function initFiltering(elements, indexes) {
         }
     });
 
-    const compare = createComparison(defaultRules);
 
     return (data, state, action) => {
         // @todo: #4.2 — обработать очистку поля
@@ -34,8 +35,15 @@ export function initFiltering(elements, indexes) {
             }
         }
         
-
-        // @todo: #4.5 — отфильтровать данные используя компаратор
-        return data.filter(row => compare(row, state));
-    }
-}
+        const searchState = {...state};
+        searchState.total = [state.totalFrom, state.totalTo];
+        delete searchState.totalFrom;
+        delete searchState.totalTo;// @todo: #4.5 — отфильтровать данные используя компаратор
+        return data.filter(item => {
+            const itemForCompare = {
+                ...item,
+                total: item.total !== undefined && item.total !== null ? Number(item.total) : item.total
+            };
+        return compare(itemForCompare, searchState);
+        });
+}};
