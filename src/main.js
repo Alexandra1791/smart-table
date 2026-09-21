@@ -25,8 +25,6 @@ const sampleTable = initTable(
   render,
 );
 
-sampleTable.render(sourceData.slice(0, 10));
-
 const applySearching = initSearching("search");
 
 const { applyFiltering, updateIndexes } = initFiltering(
@@ -90,7 +88,7 @@ async function init() {
     try {
         const indexes = await api.getIndexes();
         updateIndexes(sampleTable.filter.elements, {
-            searchBySeller: indexes.sellers,
+            searchBySeller: indexes?.sellers || [],
         });
     } catch (error) {
         console.error('Не удалось загрузить индексы для фильтров:', error);
