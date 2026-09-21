@@ -85,10 +85,14 @@ const appRoot = document.querySelector("#app");
 appRoot.appendChild(sampleTable.container);
 
 async function init() {
-  const indexes = await api.getIndexes();
-  updateIndexes(sampleTable.filter.elements, {
-    searchBySeller: indexes.sellers,
-  });
+    try {
+        const indexes = await api.getIndexes();
+        updateIndexes(sampleTable.filter.elements, {
+            searchBySeller: indexes.sellers,
+        });
+    } catch (error) {
+        console.error('Не удалось загрузить индексы для фильтров:', error);
+    }
 }
 
 init().then(render);
