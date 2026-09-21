@@ -25,6 +25,8 @@ const sampleTable = initTable(
   render,
 );
 
+sampleTable.render(sourceData.slice(0, 10));
+
 const applySearching = initSearching("search");
 
 const { applyFiltering, updateIndexes } = initFiltering(
